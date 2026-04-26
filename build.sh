@@ -10,12 +10,10 @@ if command -v pkg >/dev/null 2>&1; then
 
     pkg update -y && pkg upgrade -y
 
-    # REQUIRED FOR cryptography (IMPORTANT FIX)
     pkg install -y tur-repo
     pkg install -y gcc-11
-    pkg install -y git python rust binutils-is-llvm
+    pkg install -y git python rust binutils-is-llvm openssl libffi clang make
 
-    # set compiler flags (CRYPTO FIX)
     export CXXFLAGS="-Wno-register"
     export CFLAGS="-Wno-register"
 
@@ -55,9 +53,16 @@ if [ -f "requirements.txt" ]; then
     python3 -m pip install -r requirements.txt
 fi
 
-# ================= CRYPTO SPECIAL FIX =================
-echo "[+] Fixing cryptography install (Termux safe mode)..."
-python3 -m pip install cryptography
+# ================= CRYPTO FIX (IMPORTANT CHANGE) =================
+echo "[+] Installing cryptography (NO BUILD MODE)..."
+
+python3 -m pip install cryptography --only-binary cryptography
+
+# fallback if wheel fails
+if [ $? -ne 0 ]; then
+    echo "[!] Wheel failed, trying fallback version..."
+    python3 -m pip install cryptography==41.0.7 --only-binary cryptography
+fi
 
 # ================= RUN =================
 echo "[+] Running bot..."
