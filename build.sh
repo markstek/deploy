@@ -4,7 +4,7 @@ echo "=============================="
 echo " AUTO DEPLOY STARTING"
 echo "=============================="
 
-# Detect OS
+# ================= OS DETECT =================
 if command -v pkg >/dev/null 2>&1; then
     echo "[+] Termux detected"
     pkg update -y
@@ -18,27 +18,32 @@ elif command -v brew >/dev/null 2>&1; then
     brew install python git
 fi
 
-# CONFIG
-REPO="https://github.com/markstek/main"
+# ================= CONFIG =================
+REPO="https://github.com/markstek/main.git"
 FOLDER="bot"
 MAIN="main.py"
 
-# CLONE OR UPDATE
+# ================= CLONE OR UPDATE =================
 if [ -d "$FOLDER" ]; then
     echo "[+] Updating repo..."
-    cd $FOLDER && git pull
+    cd "$FOLDER" || exit
+    git pull
 else
     echo "[+] Cloning repo..."
-    git clone $REPO $FOLDER
-    cd $FOLDER
+    git clone "$REPO" "$FOLDER"
+    cd "$FOLDER" || exit
 fi
 
-# INSTALL REQUIREMENTS
+# ================= PIP FIX =================
+echo "[+] Upgrading pip..."
+python3 -m pip install --upgrade pip setuptools wheel
+
+# ================= INSTALL REQUIREMENTS =================
 if [ -f "requirements.txt" ]; then
     echo "[+] Installing Python modules..."
-    pip3 install -r requirements.txt
+    python3 -m pip install -r requirements.txt
 fi
 
-# RUN SCRIPT
+# ================= RUN =================
 echo "[+] Running bot..."
-python3 $MAIN
+python3 "$MAIN"
