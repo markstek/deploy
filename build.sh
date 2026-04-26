@@ -19,7 +19,7 @@ elif command -v brew >/dev/null 2>&1; then
 fi
 
 # CONFIG
-REPO="https://github.com/YOUR_USERNAME/YOUR_REPO.git"
+REPO="https://github.com/markstek/main"
 FOLDER="bot"
 MAIN="main.py"
 
