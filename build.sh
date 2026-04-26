@@ -47,21 +47,22 @@ fi
 echo "[+] Upgrading pip..."
 python3 -m pip install --upgrade pip setuptools wheel
 
-# ================= INSTALL REQUIREMENTS =================
-if [ -f "requirements.txt" ]; then
-    echo "[+] Installing Python modules..."
-    python3 -m pip install -r requirements.txt
+# ================= CRYPTO FIX (MUST COME FIRST) =================
+echo "[+] Installing cryptography safely..."
+
+LDFLAGS="-L$PREFIX/lib" CFLAGS="-I$PREFIX/include" \
+python3 -m pip install cryptography --no-cache-dir --only-binary=:all:
+
+# fallback
+if [ $? -ne 0 ]; then
+    echo "[!] Fallback version install..."
+    python3 -m pip install cryptography==41.0.7 --no-cache-dir --only-binary=:all:
 fi
 
-# ================= CRYPTO FIX (IMPORTANT CHANGE) =================
-echo "[+] Installing cryptography (NO BUILD MODE)..."
-
-python3 -m pip install cryptography --only-binary cryptography
-
-# fallback if wheel fails
-if [ $? -ne 0 ]; then
-    echo "[!] Wheel failed, trying fallback version..."
-    python3 -m pip install cryptography==41.0.7 --only-binary cryptography
+# ================= INSTALL REQUIREMENTS =================
+if [ -f "requirements.txt" ]; then
+    echo "[+] Installing remaining modules..."
+    python3 -m pip install -r requirements.txt
 fi
 
 # ================= RUN =================
