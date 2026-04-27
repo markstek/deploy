@@ -11,7 +11,7 @@ clear
 
 echo -e "${CYAN}"
 echo "======================================"
-echo "     IVAC NEXUS SCHEDULER"
+echo "    IVAC NEXUS SCHEDULER"
 echo "======================================"
 echo -e "${NC}"
 
