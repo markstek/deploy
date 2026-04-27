@@ -51,12 +51,12 @@ python3 -m pip install --upgrade pip setuptools wheel
 echo "[+] Installing cryptography safely..."
 
 LDFLAGS="-L$PREFIX/lib" CFLAGS="-I$PREFIX/include" \
-python3 -m pip install cryptography --no-cache-dir --only-binary=:all:
+
 
 # fallback
 if [ $? -ne 0 ]; then
     echo "[!] Fallback version install..."
-    python3 -m pip install cryptography==41.0.7 --no-cache-dir --only-binary=:all:
+   
 fi
 
 # ================= INSTALL REQUIREMENTS =================
