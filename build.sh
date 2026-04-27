@@ -10,9 +10,9 @@ NC="\033[0m"
 clear
 
 echo -e "${CYAN}"
-echo "=============================="
-echo "   NEXUS CONTROL PANEL"
-echo "=============================="
+echo "======================================"
+echo "     IVAC NEXUS SCHEDULER"
+echo "======================================"
 echo -e "${NC}"
 
 # ================= PYTHON DETECT =================
@@ -49,17 +49,17 @@ full_setup() {
 
     # OS DETECT
     if command -v pkg >/dev/null 2>&1; then
-        echo -e "${GREEN}[+] Termux environment detected${NC}"
+        echo -e "${GREEN}[+] Termux detected${NC}"
         pkg update -y && pkg upgrade -y
         pkg install -y python git rust clang make openssl libffi
 
     elif command -v apt >/dev/null 2>&1; then
-        echo -e "${GREEN}[+] Linux environment detected${NC}"
+        echo -e "${GREEN}[+] Linux detected${NC}"
         sudo apt update -y
         sudo apt install -y python3 python3-pip git build-essential
 
     elif command -v brew >/dev/null 2>&1; then
-        echo -e "${GREEN}[+] macOS environment detected${NC}"
+        echo -e "${GREEN}[+] macOS detected${NC}"
         brew install python git rust
     fi
 
@@ -75,7 +75,7 @@ full_setup() {
     fi
 
     # PIP UPDATE
-    echo -e "${CYAN}[+] Upgrading pip system...${NC}"
+    echo -e "${CYAN}[+] Upgrading pip...${NC}"
     $PYTHON -m pip install --upgrade pip setuptools wheel
 
     # REQUIREMENTS
@@ -85,7 +85,7 @@ full_setup() {
     fi
 
     # RUN
-    echo -e "${GREEN}[+] Launching bot system...${NC}"
+    echo -e "${GREEN}[+] Launching bot...${NC}"
     $PYTHON "$MAIN"
 }
 
@@ -93,10 +93,10 @@ full_setup() {
 run_bot() {
     if [ -d "$FOLDER" ]; then
         cd "$FOLDER" || exit
-        echo -e "${GREEN}[+] Starting bot...${NC}"
+        echo -e "${GREEN}[+] Running bot...${NC}"
         $PYTHON "$MAIN"
     else
-        echo -e "${RED}[!] Bot not found. Run FULL DEPLOY first.${NC}"
+        echo -e "${RED}[!] Bot folder not found. Run FULL DEPLOY first.${NC}"
     fi
 }
 
@@ -104,12 +104,12 @@ run_bot() {
 clean_bot() {
     if [ -d "$FOLDER" ]; then
         cd "$FOLDER" || exit
-        echo -e "${YELLOW}[+] Cleaning bot directory...${NC}"
+        echo -e "${YELLOW}[+] Cleaning bot folder...${NC}"
 
         find . -type f ! -name "$MAIN" -delete
         find . -type d ! -path "." -exec rm -rf {} + 2>/dev/null
 
-        echo -e "${GREEN}[+] Clean completed${NC}"
+        echo -e "${GREEN}[+] Clean complete (only $MAIN kept)${NC}"
     else
         echo -e "${RED}[!] Folder not found${NC}"
     fi
@@ -120,6 +120,6 @@ case $choice in
     1) full_setup ;;
     2) run_bot ;;
     3) clean_bot ;;
-    4) echo -e "${CYAN}Exiting Nexus...${NC}" ;;
+    4) echo -e "${CYAN}Exiting...${NC}" ;;
     *) echo -e "${RED}Invalid option${NC}" ;;
 esac
